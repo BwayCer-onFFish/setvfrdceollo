@@ -2,7 +2,7 @@ var p, len;
 
 var bcvPly = videojs( 'setPlyMain' );
 var helPlaylist = document.getElementById( 'playlist' );
-var helErrMsg = document.getElementById( 'errMsg' );
+var helLogMsg = document.getElementById( 'logMsg' );
 
 var vidolInfoList = [
     { name: '極品絕配', vid: '5326531447001' },
@@ -17,15 +17,17 @@ for ( p = 0, len = vidolInfoList.length; p < len ; p++ ) {
 }
 
 bcvPly.on( 'loadstart', function () {
-    console.log( ' -- loadstart -- ' );
+    pushLog( ' -- loadstart -- ' );
 } );
 
 bcvPly.on( 'durationchange', function () {
-    console.log( ' -- durationchange -- ' );
+    pushLog( ' -- durationchange -- ' );
 } );
 
+setVideo( vidolInfoList[ 0 ] );
+
 function setVideo( objVidolInfo ) {
-    console.log( ' -- setVideo -- ' );
+    pushLog( ' -- setVideo -- ' );
 
     bcvPly.catalog.getVideo( objVidolInfo.vid, function( err, bcvVideo ){
         bcvPly.paused();
@@ -53,24 +55,32 @@ function setVideo( objVidolInfo ) {
         bcvPly.on( 'loadstart', function () {
             var p, len, item;
 
-            console.log( ' -- 當前影片： ' + objVidolInfo.name );
+            pushLog( ' -- 當前影片： ' + objVidolInfo.name );
+
+            history.pushState( null, 'title', 'common.html?name=' + objVidolInfo.name );
 
             bcvPly.one( 'durationchange', function () {
+                bcvPly.ima3.adrequest( 'https://pubads.g.doubleclick.net/gampad/ads?sz=1024x768&iu=/123939770/test_sabine_0120&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]' );
+
                 bcvPly.play();
             } );
 
             for ( p = 0, len = vidolInfoList.length; p < len ; p++ ) {
                 item = vidolInfoList[ p ];
-                if ( item === objVidolInfo ) item.classList.add( 'esPlay' );
-                else item.classList.remove( 'esPlay' );
+                if ( item === objVidolInfo ) item.btn.classList.add( 'esPlay' );
+                else item.btn.classList.remove( 'esPlay' );
             }
         } );
 
 
-        console.log( ' -- 更換影片： ' + objVidolInfo.name );
-        console.log( ' -- 更換影片： ' + bcvVideo );
-        i.v.catalog.load( bcvVideo );
+        pushLog( ' -- 更換影片： ' + objVidolInfo.name );
+        bcvPly.catalog.load( bcvVideo );
     } );
+}
+
+function pushLog( strTxt ) {
+    console.log( strTxt );
+    helLogMsg.innerText += '\n' + strTxt;
 }
 
 function pushError( strCode ) {
@@ -116,13 +126,16 @@ function pushError( strCode ) {
             errMsg = strCode;
     }
 
-    helErrMsg.innerText += '\n' + errMsg;
+    console.error( strTxt );
+    helLogMsg.innerText += '\n' + errMsg;
 }
 
 function getPlayListButton( objVidolInfo ) {
     var helDivBtn = document.createElement( 'div' );
+    helDivBtn.className = 'btn btn-default';
     helDivBtn.innerText = objVidolInfo.name;
     helDivBtn.onclick = function () { setVideo( objVidolInfo ); };
     objVidolInfo.btn = helDivBtn;
+    return helDivBtn;
 }
 

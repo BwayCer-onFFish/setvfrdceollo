@@ -4,29 +4,20 @@
 
         <meta charset="utf-8">
         <title>普通播放器</title>
+        <link rel="stylesheet" href="common.css">
 
     </head>
     <body>
 
-        <style>
-            body {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-            }
-        </style>
-
-        <div>
-            <video id="setPlyMain" class="video-js LxBcvPly"
+        <div id="content">
+            <video id="setPlyMain" class="video-js LxBcvPly" controls
                 data-account="4338955585001"
                 data-video-id=""
                 data-player="VJxyQW4m0e"
                 data-embed="default">
             </video>
 
-            <div id="errMsg"></div>
+            <div id="logMsg"></div>
         </div>
         <div id="playlist"></div>
 
