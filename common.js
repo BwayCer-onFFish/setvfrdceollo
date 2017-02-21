@@ -57,9 +57,10 @@ function setVideo( objVidolInfo ) {
 
             pushLog( ' -- 當前影片： ' + objVidolInfo.name );
 
-            history.pushState( null, 'title', 'common.html?name=' + objVidolInfo.name );
+            history.pushState( null, 'title', '?name=' + objVidolInfo.name );
 
             bcvPly.one( 'durationchange', function () {
+                bcvPly.ima3.adsLoader.contentComplete();
                 bcvPly.ima3.adrequest( 'https://pubads.g.doubleclick.net/gampad/ads?sz=1024x768&iu=/123939770/test_sabine_0120&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]' );
 
                 bcvPly.play();
